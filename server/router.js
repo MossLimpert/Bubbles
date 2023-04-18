@@ -18,6 +18,18 @@ const router = (app) => {
   app.post('/maker', mid.requiresLogin, controllers.Domo.makeDomo);
 
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
+
+  // create status
+
+  // get user status
+
+  // get bubble
+
+  // create bubble
+
+  // create profile pic
+
+  // get profile pic
 };
 
 module.exports = router;
