@@ -60,7 +60,7 @@ const signup = async (req, res) => {
   }
 };
 
-// DOMOMAKER E
+// change password page
 const changePassPage = (req, res) => res.render('reset');
 
 // allows a current user to change their password

@@ -14,7 +14,7 @@ const joinBubble = async (req, res) => {
         return res.status(400).json({ error: 'All fields are required!' });
     }
 
-    return Bubble.authenticate(bubblename, pass, (err, bubble) => {
+    return await Bubble.authenticate(bubblename, pass, (err, bubble) => {
         if (err || !bubble) {
             return res.status(401).json({ error: 'Wrong bubble name or password!' });
         }
@@ -64,3 +64,8 @@ const createBubble = async (req, res) => {
     }
 }
 
+module.exports = {
+    joinPage,
+    joinBubble,
+    createBubble,
+}

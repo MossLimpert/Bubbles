@@ -23,10 +23,13 @@ const router = (app) => {
 
   // get user status
 
-  // get bubble
+  // get a bubble
 
-  // create bubble
-
+  // create / join bubble
+  app.get('/join-bubble', mid.requiresSecure, mid.requiresLogin, controllers.Bubble.joinBubblePage);
+  app.post('/join-bubble', mid.requiresSecure, mid.requiresLogin, controllers.Bubble.joinBubble);
+  app.post('/create-bubble', mid.requiresSecure, mid.requiresLogin, controllers.Bubble.createBubble);
+  
   // create profile pic
 
   // get profile pic
