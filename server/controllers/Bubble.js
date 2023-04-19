@@ -7,7 +7,7 @@ const joinPage = (req, res) => res.render('join-bubble');
 
 // allows a user to join an already existing bubble
 const joinBubble = async (req, res) => {
-    const bubblename = `${req.body.bubblename}`;
+    const bubblename = `${req.body.name}`;
     const pass = `${req.body.pass}`;
 
     if (!bubblename || !pass) {
@@ -32,7 +32,7 @@ const joinBubble = async (req, res) => {
 
 // allows a user to create a new bubble
 const createBubble = async (req, res) => {
-    const bubblename = `${req.body.bubblename}`;
+    const bubblename = `${req.body.name}`;
     const pass = `${req.body.pass}`;
     const pass2 = `${req.body.pass2}`;
 
@@ -47,7 +47,7 @@ const createBubble = async (req, res) => {
     try {
         const hash = await Bubble.generateHash(pass);
         // CHECK TO MAKE SURE THIS WORKS
-        const newBubble = new Bubble({ bubblename, password: hash, users: [req.session.account._id] });
+        const newBubble = new Bubble({ name: bubblename, password: hash, users: [req.session.account._id] });
         await newBubble.save();
 
         // session variables

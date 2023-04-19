@@ -14,7 +14,6 @@ const BubbleSchema = new mongoose.Schema({
         required: true,
         trim: true,
         unique: true,
-        match: /^[A-Za-z0-9_\-.]{1,16}$/,
     },
     // https://mongoosejs.com/docs/populate.html
     users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Account'}],

@@ -1,4 +1,5 @@
 const models = require('../models');
+const mongoose = require('mongoose');
 
 const { Status, Bubble } = models;
 
@@ -55,7 +56,7 @@ const makeStatus = async (req, res) => {
 
     const statusData = {
         text: req.body.text,
-        user: req.session.account._id,
+        user: mongoose.Types.ObjectId(req.session.account._id),
     };
 
     try {

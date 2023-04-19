@@ -14,7 +14,7 @@ const handleJoinBubble = (e) => {
         return false;
     }
 
-    helper.sendPost(e.target.action, {bubbleName, pass});
+    helper.sendPost(e.target.action, { name: bubbleName, pass});
 
     return false;
 };
@@ -37,7 +37,11 @@ const handleCreateBubble = (e) => {
         return false;
     }
 
-    helper.sendPost(e.target.action, {bubbleName, pass, pass2});
+    helper.sendPost(e.target.action, {
+        name: bubbleName, 
+        pass, 
+        pass2
+    });
 
     return false;
 };
@@ -56,6 +60,7 @@ const JoinBubbleWindow = (props) => {
             <input id="bubbleName" type="text" name="bubbleName" placeholder="bubble name" />
             <label htmlFor="bubblePassword">Bubble Password: </label>
             <input id="bubblePassword" type="password" name="bubblePassword" placeholder="password" />
+            <input className="formSubmit" type="submit" value="Join Bubble" />
         </form>
     )
 };
@@ -76,6 +81,7 @@ const CreateBubbleWindow = (props) => {
             <input id="bubblePassword" name="bubblePassword" type="password" placeholder="password" />
             <label htmlFor="retypePassword">Retype Password: </label>
             <input id="retypePassword" name="retypePassword" type="password" placeholder="retype password" />
+            <input className="formSubmit" type="submit" value="Create Bubble" />
         </form>
     )
 };

@@ -54,7 +54,7 @@ const BubbleList = (props) => {
     });
 
     return (
-        <div className="bubbleList">
+        <div className="bubblesList">
             {domoNodes}
         </div>
     );
@@ -78,7 +78,7 @@ const init = () => {
     );
 
     ReactDOM.render(
-        <StatusList bubbles={[]} />,
+        <BubbleList bubbles={[]} />,
         document.getElementById('bubbles')
     );
 
