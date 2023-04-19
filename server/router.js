@@ -5,8 +5,8 @@ const router = (app) => {
   app.get('/getDomos', mid.requiresLogin, controllers.Domo.getDomos);
 
   // DOMOMAKER E
-  app.get('/changePassword', mid.requiresSecure, mid.requiresLogin, controllers.Account.changePassPage);
-  app.post('/changePassword', mid.requiresSecure, mid.requiresLogin, controllers.Account.changePassword);
+  app.get('/change-password', mid.requiresSecure, mid.requiresLogin, controllers.Account.changePassPage);
+  app.post('/change-password', mid.requiresSecure, mid.requiresLogin, controllers.Account.changePassword);
 
   app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
@@ -14,8 +14,8 @@ const router = (app) => {
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
 
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
-  app.get('/maker', mid.requiresLogin, controllers.Domo.makerPage);
-  app.post('/maker', mid.requiresLogin, controllers.Domo.makeDomo);
+  app.get('/home', mid.requiresLogin, controllers.Status.home);
+  app.post('/home', mid.requiresLogin, controllers.Status.makeStatus);
 
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 
@@ -24,15 +24,13 @@ const router = (app) => {
   // get user status
 
   // get a bubble
+  app.get('/get-bubbles', mid.requiresSecure, mid.requiresLogin, controllers.Bubble.getBubbles);
 
   // create / join bubble
-  app.get('/join-bubble', mid.requiresSecure, mid.requiresLogin, controllers.Bubble.joinBubblePage);
+  app.get('/join-bubble', mid.requiresSecure, mid.requiresLogin, controllers.Bubble.joinPage);
   app.post('/join-bubble', mid.requiresSecure, mid.requiresLogin, controllers.Bubble.joinBubble);
   app.post('/create-bubble', mid.requiresSecure, mid.requiresLogin, controllers.Bubble.createBubble);
   
-  // create profile pic
-
-  // get profile pic
 };
 
 module.exports = router;

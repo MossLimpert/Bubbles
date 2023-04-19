@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
-  <title>DomoMaker</title>
+  <title>Bubbles</title>
   <link rel="shortcut icon" href="/assets/img/favicon.png"/>
   <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
 </head>
@@ -10,21 +10,19 @@
   <div class="navlink"><a id="joinButton" href="/join-bubble">Join Bubble</a></div>
     <div class="navlink"><a id="createButton" href="/create-bubble">Create Bubble</a></div>
     <div class="navlink"><a href="/logout">Log out</a></div>
-    <div class="navlink" id="changePass"><a href="/changePassword">Change Password</a></div>
+    <div class="navlink" id="changePass"><a href="/change-password">Change Password</a></div>
   </nav>
-
-  <section id="makeDomo">
+  <div id="message" class='hidden'>
+    <h3><span id="errorMessage"></span></h3>
+  </div>
+  <section id="makeStatus">
 
   </section>
-  <section id="domos">
+  <section id="bubbles">
     
   </section>
 
-  <div id="domoMessage" class='hidden'>
-    <img id="speech" src="/assets/img/speech.png" alt="speech box"/>
-    <h3><span id="errorMessage"></span></h3>
-    <img id="domo" src="assets/img/domo.png" alt="domo"/>
-  </div>
+  
   <script src="/assets/appBundle.js"></script>
 </body>
 </html>

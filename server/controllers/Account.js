@@ -25,7 +25,7 @@ const login = (req, res) => {
     // session variables
     req.session.account = Account.toAPI(account);
 
-    return res.json({ redirect: '/maker' });
+    return res.json({ redirect: '/home' });
   });
 };
 
@@ -50,7 +50,7 @@ const signup = async (req, res) => {
     // session variables
     req.session.account = Account.toAPI(newAccount);
 
-    return res.json({ redirect: '/maker' });
+    return res.json({ redirect: '/home' });
   } catch (err) {
     console.log(err);
     if (err.code === 11000) {
@@ -89,7 +89,7 @@ const changePassword = async (req, res) => {
       await Account.updateOne({ username }, { password: hash });
 
       req.session.account = Account.toAPI(account);
-      return res.json({ redirect: '/maker' });
+      return res.json({ redirect: '/home' });
     });
   } catch (err) {
     console.log(err);

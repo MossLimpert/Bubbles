@@ -2,100 +2,87 @@ const helper = require('./helper.js');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
-const handleDomo = (e) => {
+const handleStatus = (e) => {
     e.preventDefault();
     helper.hideError();
 
-    const name = e.target.querySelector('#domoName').value;
-    const age = e.target.querySelector('#domoAge').value;
-    const color = e.target.querySelector('#domoColor').value;
+    const text = e.target.querySelector('#statusText').value;
 
-    if (!name || !age || !color) {
+    if (!text) {
         helper.handleError('All fields are required!');
         return false;
     }
 
-    helper.sendPost(e.target.action, {name, age, color}, loadDomosFromServer);
+    helper.sendPost(e.target.action, {text}, loadBubblesFromServer);
 
     return false;
 };
 
-const DomoForm = (props) => {
+const StatusForm = (props) => {
     return (
-        <form id="domoForm"
-            onSubmit={handleDomo}
-            name="domoForm"
-            action="/maker"
+        <form id="statusForm"
+            onSubmit={handleStatus}
+            name="statusForm"
+            action="/home"
             method="POST"
-            className="domoForm"
+            className="statusForm"
         >
-            <label htmlFor="name">Name: </label>
-            <input id="domoName" type="text" name="name" placeholder="Domo Name" />
-            <label htmlFor="age">Age: </label>
-            <input id="domoAge" type="number" min="0" name="age" />
-            <br /> <br />
-            <label htmlFor="color">Color: </label>
-            <input id="domoColor" type="text" placeholder="brown" />
-            <input className="makeDomoSubmit" type="submit" value="Make Domo" />
+            <h3>Create Status</h3>
+            <label htmlFor="text">Status Text:</label>
+            <input id="statusText" type="text" name="text" placeholder="listening to music" />
+            <input className="makeStatusSubmit" type="submit" value="Post Status" />
         </form>
     );
 };
 
-const DomoList = (props) => {
-    if (props.domos.length === 0) {
+const BubbleList = (props) => {
+    if (props.bubbles.length === 0) {
         return (
-            <div className="domoList">
-                <h3 className="emptyDomo">No Domos Yet!</h3>
+            <div className="bubblesList">
+                <h3 className="emptyBubbles">No Bubbles Yet!</h3>
             </div>
         );
     }
 
-    const domoNodes = props.domos.map(domo => {
+    const domoNodes = props.bubbles.map(bubble => {
         return (
-            <div key={domo._id} className="domo">
-                <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
-                <h3 className="domoName">Name: {domo.name} </h3>
-                <h3 className="domoAge">Age: {domo.age}</h3>
-                <h3 className="domoColor">Color: {domo.color}</h3>
+            <div key={bubble._id} className="bubble">
+                <h3 className="bubbleName">Name: {bubble.name} </h3>
+                <h3 className="bubbleUsers">Users: {bubble.users}</h3>
             </div>
         );
     });
 
     return (
-        <div className="domoList">
+        <div className="bubbleList">
             {domoNodes}
         </div>
     );
 };
 
-const loadDomosFromServer = async () => {
-    const response = await fetch('/getDomos');
+const loadBubblesFromServer = async () => {
+    const response = await fetch('/get-bubbles');
     const data = await response.json();
     ReactDOM.render(
-        <DomoList domos={data.domos} />,
-        document.getElementById('domos')
+        <BubbleList bubbles={data.bubbles} />,
+        document.getElementById('bubbles')
     );
 };
 
 const init = () => {
-    //const changePassButton = document.getElementById('changePass');
-
-    // changePassButton.addEventListener('click', (e) => {
-    //     e.preventDefault();
-    //     // HERE
-    // })
+    
 
     ReactDOM.render(
-        <DomoForm />,
-        document.getElementById('makeDomo')
+        <StatusForm />,
+        document.getElementById('makeStatus')
     );
 
     ReactDOM.render(
-        <DomoList domos={[]} />,
-        document.getElementById('domos')
+        <StatusList bubbles={[]} />,
+        document.getElementById('bubbles')
     );
 
-    loadDomosFromServer();
+    loadBubblesFromServer();
 };
 
 window.onload = init;

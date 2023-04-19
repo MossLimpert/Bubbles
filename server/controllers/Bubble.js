@@ -64,8 +64,19 @@ const createBubble = async (req, res) => {
     }
 }
 
+const getBubbles = async (req, res) => {
+    try {
+        const bubbles = await Bubble.find({ users: req.session.account._id });
+        return res.json({ bubbles: bubbles });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ error: 'An error occured!' });
+    }
+};
+
 module.exports = {
     joinPage,
     joinBubble,
     createBubble,
+    getBubbles,
 }
