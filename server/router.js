@@ -2,7 +2,6 @@ const controllers = require('./controllers');
 const mid = require('./middleware');
 
 const router = (app) => {
-  //app.get('/getDomos', mid.requiresLogin, controllers.Domo.getDomos);
 
   app.get('/change-password', mid.requiresSecure, mid.requiresLogin, controllers.Account.changePassPage);
   app.post('/change-password', mid.requiresSecure, mid.requiresLogin, controllers.Account.changePassword);
@@ -29,6 +28,7 @@ const router = (app) => {
   
 
   // get user status
+  app.get('/get-current-status', mid.requiresSecure, mid.requiresLogin, controllers.Status.getCurrentUserStatus);
 
   // get a bubble
   app.get('/get-bubbles', mid.requiresSecure, mid.requiresLogin, controllers.Bubble.getBubbles);

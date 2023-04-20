@@ -1,4 +1,5 @@
 const models = require('../models');
+const mongoose = require('mongoose');
 
 const { Bubble } = models;
 
@@ -20,7 +21,7 @@ const joinBubble = async (req, res) => {
         }
 
         // add user to bubble
-        bubble.users.push(req.session.account._id);
+        bubble.users.push(new mongoose.Types.ObjectId(req.session.account._id));
         bubble.save();
 
         // session variables
@@ -47,7 +48,7 @@ const createBubble = async (req, res) => {
     try {
         const hash = await Bubble.generateHash(pass);
         // CHECK TO MAKE SURE THIS WORKS
-        const newBubble = new Bubble({ name: bubblename, password: hash, users: [req.session.account._id] });
+        const newBubble = new Bubble({ name: bubblename, password: hash, users: [new mongoose.Types.ObjectId(req.session.account._id)] });
         await newBubble.save();
 
         // session variables
@@ -66,7 +67,7 @@ const createBubble = async (req, res) => {
 
 const getBubbles = async (req, res) => {
     try {
-        const bubbles = await Bubble.find({ users: req.session.account._id });
+        const bubbles = await Bubble.find({ users: new mongoose.Types.ObjectId(req.session.account._id) });
         return res.json({ bubbles: bubbles });
     } catch (err) {
         console.log(err);

@@ -13,11 +13,12 @@ const handleStatus = (e) => {
         return false;
     }
 
-    helper.sendPost(e.target.action, {text}, loadBubblesFromServer);
+    helper.sendPost(e.target.action, {text}, loadUserStatus);
 
     return false;
 };
 
+// react status form component
 const StatusForm = (props) => {
     return (
         <form id="statusForm"
@@ -34,7 +35,7 @@ const StatusForm = (props) => {
         </form>
     );
 };
-
+// react bubble list component
 const BubbleList = (props) => {
     if (props.bubbles.length === 0) {
         return (
@@ -59,6 +60,17 @@ const BubbleList = (props) => {
         </div>
     );
 };
+// react current status component
+const CurrentStatus = (props) => {
+    return (
+        <h3>Current Status: {props.status}</h3>
+    )
+};
+
+const reloadPage = async () => {
+    await loadBubblesFromServer();
+    await loadUserStatus();
+};
 
 const loadBubblesFromServer = async () => {
     const response = await fetch('/get-bubbles');
@@ -68,6 +80,15 @@ const loadBubblesFromServer = async () => {
         document.getElementById('bubbles')
     );
 };
+
+const loadUserStatus = async () => {
+    const response = await fetch('/get-current-status');
+    const data = await response.json();
+    ReactDOM.render(
+        <CurrentStatus status={data.status} />,
+        document.getElementById('currentStatus')
+    );
+}
 
 const init = () => {
     
@@ -83,6 +104,7 @@ const init = () => {
     );
 
     loadBubblesFromServer();
+    loadUserStatus();
 };
 
 window.onload = init;

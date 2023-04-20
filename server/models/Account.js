@@ -26,7 +26,7 @@ const AccountSchema = new mongoose.Schema({
     default: Date.now,
   },
   currentStatus: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
   },
 });
 
@@ -58,6 +58,15 @@ AccountSchema.statics.authenticate = async (username, password, callback) => {
       return callback(null, doc);
     }
     return callback();
+  } catch (err) {
+    return callback(err);
+  }
+};
+
+AccountSchema.statics.pushStatus = async (userid, statusId, callback) => {
+  try {
+    const res = await AccountModel.updateOne({ _id: userid }, { currentStatus: statusId }).exec();
+    return callback(res.acknowledged);
   } catch (err) {
     return callback(err);
   }
