@@ -38,7 +38,7 @@ const getBubbleStatuses = async (req, res) => {
 };
 
 const getUserStatuses = async (req, res) => {
-    const statusTexts = [];
+    const statuses = [];
     try {
         // find all statuses that have user's id
         const myStatuses = await Status.find({ userid: req.session.account._id }).exec();
@@ -49,7 +49,7 @@ const getUserStatuses = async (req, res) => {
             statuses.push(myStatuses[i].text);
         }
 
-        return res.json({ statuses: statusTexts });
+        return res.json({ statuses: myStatuses });
     
     } catch (err) {
         console.log(err);

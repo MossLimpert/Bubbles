@@ -67,7 +67,12 @@ const createBubble = async (req, res) => {
 
 const getBubbles = async (req, res) => {
     try {
-        const bubbles = await Bubble.find({ users: new mongoose.Types.ObjectId(req.session.account._id) });
+        const bubbles = await Bubble.find({ users:  { $in: [ req.session.account._id ]}});
+        console.log(bubbles);
+        if (!bubbles) {
+            return res.json({ bubbles: [] });
+        }
+
         return res.json({ bubbles: bubbles });
     } catch (err) {
         console.log(err);

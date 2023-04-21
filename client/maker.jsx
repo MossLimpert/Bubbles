@@ -42,9 +42,9 @@ const StatusForm = (props) => {
 // username span in bubble node
 const UsernameSpan = (props) => {
     return (
-        <span>
+        <li>
             {props.username}
-        </span>
+        </li>
     )
 };
 
@@ -65,9 +65,10 @@ const BubbleNode = async (props) => {
     return (
         <div key={props.bubble._id} className="bubble">
             <h2 className="bubbleName">Name: {props.bubble.name} </h2>
-            <p className="bubbleUsers">Users: 
+            <h3>Users: </h3>
+            <ul className="bubbleUsers"> 
                 {usernameNodes}
-            </p>
+            </ul>
         </div>
     );
     
@@ -87,16 +88,8 @@ const BubbleList = async (props) => {
     // give it a bubble
     const bubbleNodes = {}
 
-    // const usernames = [];   // username names
-    // get user names for each bubble
-    // for (let i = 0; i < props.bubbles.length; i++) {
-    //     let response = await helper.sendPost(`/get-bubble-users`, { usernames: props.bubbles[i].usernames } );
-    //     let data = await response.json();
-    //     console.log(data);
-    // };
-
     for (let i = 0; i < props.bubbles.length; i++) {
-        bubbleNodes.push( await BubbleNode({ bubble: props.bubbles[i] }));
+        bubbleNodes.push( <BubbleNode bubbles={props.bubbles[i]}/>);
     };
 
     return (
@@ -125,12 +118,12 @@ const reloadPage = () => {
 
 
 const loadBubblesFromServer = async () => {
-    const response = await fetch('/get-bubbles');
-    const data = await response.json();
-    ReactDOM.render(
-        <BubbleList bubbles={data.bubbles} />,
-        document.getElementById('bubbles')
-    );
+    //const response = await fetch('/get-bubbles');
+    //const data = await response.json();
+    // ReactDOM.render(
+    //     <BubbleList bubbles={data.bubbles} />,
+    //     document.getElementById('bubbles')
+    // );
 };
 
 const loadUserStatus = async () => {
@@ -143,21 +136,19 @@ const loadUserStatus = async () => {
 }
 
 const init = () => {
-    
+    // ReactDOM.render(
+    //     <StatusForm />,
+    //     document.getElementById('makeStatus')
+    // );
 
-    ReactDOM.render(
-        <StatusForm />,
-        document.getElementById('makeStatus')
-    );
+    // ReactDOM.render(
+    //     <BubbleList bubbles={[]} />,
+    //     document.getElementById('bubbles')
+    // );
 
-    ReactDOM.render(
-        <BubbleList bubbles={[]} />,
-        document.getElementById('bubbles')
-    );
-
-    loadBubblesFromServer();
-    fetch('/get-user-statuses');
-    loadUserStatus();
+    //loadBubblesFromServer();
+    fetch('/get-bubbles');
+    //loadUserStatus();
 };
 
 window.onload = init;
