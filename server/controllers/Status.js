@@ -38,10 +38,18 @@ const getBubbleStatuses = async (req, res) => {
 };
 
 const getUserStatuses = async (req, res) => {
+    const statusTexts = [];
     try {
         // find all statuses that have user's id
-        const myStatuses = await Status.find({ user: req.session.account._id }).exec();
-        return res.json({ statuses: myStatuses });
+        const myStatuses = await Status.find({ userid: req.session.account._id }).exec();
+        
+        //console.log(myStatuses);
+
+        for (let i = 0; i < myStatuses.length; i++) {
+            statuses.push(myStatuses[i].text);
+        }
+
+        return res.json({ statuses: statusTexts });
     
     } catch (err) {
         console.log(err);
@@ -52,8 +60,10 @@ const getUserStatuses = async (req, res) => {
 const getCurrentUserStatus = async (req, res) => {
     try {
         const user = await Account.findById(req.session.account._id).exec();
+        //console.log(user);
         const status = await Status.findById(user.currentStatus).exec();
-        return res.json({ status: status });
+        //console.log(status);
+        return res.json({ status: status.text });
     } catch (err) {
         console.log(err);
         return res.status(500).json({ error: 'Error retrieving status!' });
@@ -68,7 +78,7 @@ const makeStatus = async (req, res) => {
 
     const statusData = {
         text: req.body.text,
-        userid: new mongoose.Types.ObjectId(req.session.account._id),
+        userid: req.session.account._id,
     };
 
     try {

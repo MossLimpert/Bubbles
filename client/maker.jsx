@@ -2,6 +2,9 @@ const helper = require('./helper.js');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
+// to do later, have it so it doesn't do this every window relosd 
+// wait maybe i do want that
+
 const handleStatus = (e) => {
     e.preventDefault();
     helper.hideError();
@@ -35,8 +38,43 @@ const StatusForm = (props) => {
         </form>
     );
 };
+
+// username span in bubble node
+const UsernameSpan = (props) => {
+    return (
+        <span>
+            {props.username}
+        </span>
+    )
+};
+
+//bubble node in bubble list
+const BubbleNode = async (props) => {
+    const users = {};
+
+    for (let i = 0; i < props.bubble.usernames.length; i++) {
+        users.push(props.bubble.usernames[i]);
+    };
+
+    const usernameNodes = {};
+    
+    for (let i = 0; i < users.length; i++) {
+        usernameNodes.push(<UsernameSpan username={users[i]} />);
+    }
+
+    return (
+        <div key={props.bubble._id} className="bubble">
+            <h2 className="bubbleName">Name: {props.bubble.name} </h2>
+            <p className="bubbleUsers">Users: 
+                {usernameNodes}
+            </p>
+        </div>
+    );
+    
+};
 // react bubble list component
-const BubbleList = (props) => {
+const BubbleList = async (props) => {
+    // if user is in no bubbles, say so
     if (props.bubbles.length === 0) {
         return (
             <div className="bubblesList">
@@ -45,32 +83,46 @@ const BubbleList = (props) => {
         );
     }
 
-    const domoNodes = props.bubbles.map(bubble => {
-        return (
-            <div key={bubble._id} className="bubble">
-                <h3 className="bubbleName">Name: {bubble.name} </h3>
-                <h3 className="bubbleUsers">Users: {bubble.users}</h3>
-            </div>
-        );
-    });
+    // for each bubble, make a bubble node
+    // give it a bubble
+    const bubbleNodes = {}
+
+    // const usernames = [];   // username names
+    // get user names for each bubble
+    // for (let i = 0; i < props.bubbles.length; i++) {
+    //     let response = await helper.sendPost(`/get-bubble-users`, { usernames: props.bubbles[i].usernames } );
+    //     let data = await response.json();
+    //     console.log(data);
+    // };
+
+    for (let i = 0; i < props.bubbles.length; i++) {
+        bubbleNodes.push( await BubbleNode({ bubble: props.bubbles[i] }));
+    };
 
     return (
         <div className="bubblesList">
-            {domoNodes}
+            <h2>Bubbles: </h2>
+            { bubbleNodes }
         </div>
     );
 };
+
 // react current status component
 const CurrentStatus = (props) => {
     return (
-        <h3>Current Status: {props.status}</h3>
+        <div className="currentStatus">
+            <h3>Current Status: {props.status}</h3>
+        </div>
     )
 };
 
-const reloadPage = async () => {
-    await loadBubblesFromServer();
-    await loadUserStatus();
+
+
+const reloadPage = () => {
+    loadBubblesFromServer();
+    loadUserStatus();
 };
+
 
 const loadBubblesFromServer = async () => {
     const response = await fetch('/get-bubbles');
@@ -104,6 +156,7 @@ const init = () => {
     );
 
     loadBubblesFromServer();
+    fetch('/get-user-statuses');
     loadUserStatus();
 };
 

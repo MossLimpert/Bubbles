@@ -11,7 +11,7 @@ const StatusSchema = new mongoose.Schema({
         required: true,
     },
     userid: {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
     createdDate: {

@@ -27,8 +27,10 @@ const router = (app) => {
 
   
 
-  // get user status
+  // get current user status
   app.get('/get-current-status', mid.requiresSecure, mid.requiresLogin, controllers.Status.getCurrentUserStatus);
+  // get all user statuses
+  app.get('/get-user-statuses', mid.requiresSecure, mid.requiresLogin, controllers.Status.getUserStatuses);
 
   // get a bubble
   app.get('/get-bubbles', mid.requiresSecure, mid.requiresLogin, controllers.Bubble.getBubbles);

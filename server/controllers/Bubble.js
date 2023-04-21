@@ -75,6 +75,21 @@ const getBubbles = async (req, res) => {
     }
 };
 
+const getUsernamesInBubble = async (req, res) => {
+    try {
+        const bubble = await Bubble.find({ name: req.body.bubble }).populate('users').exec();
+        // bubble.users.forEach((userid) => {
+            
+        //     //usernames.push( await userid.find({ _id: userid}).populate('account').exec()));
+        // });
+
+        return res.json({ usernames: usernames });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ error: 'An error occured!' });
+    }
+};
+
 module.exports = {
     joinPage,
     joinBubble,

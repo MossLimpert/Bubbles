@@ -14,7 +14,10 @@ const handleJoinBubble = (e) => {
         return false;
     }
 
-    helper.sendPost(e.target.action, { name: bubbleName, pass});
+    helper.sendPost(e.target.action, { 
+        name: bubbleName, 
+        pass
+    });
 
     return false;
 };
