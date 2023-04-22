@@ -51,5 +51,8 @@ BubbleSchema.statics.authenticate = async (bubblename, password, callback) => {
     }
 };
 
+// remove user
+// add user
+
 BubbleModel = mongoose.model('Bubble', BubbleSchema);
 module.exports = BubbleModel;

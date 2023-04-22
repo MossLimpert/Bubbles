@@ -35,8 +35,6 @@ const sendPost = async (url, data, handler) => {
     }
 };
 
-// send get request to server
-
 
 const hideError = () => {
     document.getElementById('message').classList.add('hidden');

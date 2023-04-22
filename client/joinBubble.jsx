@@ -16,7 +16,7 @@ const handleJoinBubble = (e) => {
 
     helper.sendPost(e.target.action, { 
         name: bubbleName, 
-        pass
+        pass: pass,
     });
 
     return false;
@@ -109,8 +109,14 @@ const init = () => {
         return false;
     });
 
-    ReactDOM.render(<JoinBubbleWindow />,
-        document.getElementById('content'));
+    if (location.pathname == '/create-bubble') {
+        ReactDOM.render(<CreateBubbleWindow />,
+            document.getElementById('content'));
+    } else {
+        ReactDOM.render(<JoinBubbleWindow />,
+            document.getElementById('content'));
+    }
+    
 };
 
 window.onload = init;

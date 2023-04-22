@@ -2,9 +2,6 @@ const helper = require('./helper.js');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
-// to do later, have it so it doesn't do this every window relosd 
-// wait maybe i do want that
-
 const handleStatus = (e) => {
     e.preventDefault();
     helper.hideError();
@@ -39,42 +36,8 @@ const StatusForm = (props) => {
     );
 };
 
-// username span in bubble node
-const UsernameSpan = (props) => {
-    return (
-        <li>
-            {props.username}
-        </li>
-    )
-};
-
-//bubble node in bubble list
-const BubbleNode = async (props) => {
-    const users = {};
-
-    for (let i = 0; i < props.bubble.usernames.length; i++) {
-        users.push(props.bubble.usernames[i]);
-    };
-
-    const usernameNodes = {};
-    
-    for (let i = 0; i < users.length; i++) {
-        usernameNodes.push(<UsernameSpan username={users[i]} />);
-    }
-
-    return (
-        <div key={props.bubble._id} className="bubble">
-            <h2 className="bubbleName">Name: {props.bubble.name} </h2>
-            <h3>Users: </h3>
-            <ul className="bubbleUsers"> 
-                {usernameNodes}
-            </ul>
-        </div>
-    );
-    
-};
 // react bubble list component
-const BubbleList = async (props) => {
+const BubbleList = (props) => {
     // if user is in no bubbles, say so
     if (props.bubbles.length === 0) {
         return (
@@ -84,18 +47,42 @@ const BubbleList = async (props) => {
         );
     }
 
+    //console.log(props.bubbles);
+
     // for each bubble, make a bubble node
     // give it a bubble
-    const bubbleNodes = {}
+    const bubbleNodes = [];
 
     for (let i = 0; i < props.bubbles.length; i++) {
-        bubbleNodes.push( <BubbleNode bubbles={props.bubbles[i]}/>);
+        // for each user of a bubble, make a node
+        const usernameNodes = [];
+
+        for (let j = 0; j < props.bubbles[i].users.length; j++) {
+            usernameNodes.push(
+                <li>{props.bubbles[i].users[j]}</li>
+            );
+        };
+
+        //console.log(usernameNodes);
+        
+        // put it all together
+        bubbleNodes.push(
+            <div className="bubble">
+                <h2 className="bubbleName">Name: {props.bubbles[i].name} </h2>
+                <h3>Users: </h3>
+                <ul className="bubbleUsers"> 
+                    {usernameNodes}
+                </ul>
+            </div>
+        );
     };
+
+    //console.log(bubbleNodes);
 
     return (
         <div className="bubblesList">
-            <h2>Bubbles: </h2>
-            { bubbleNodes }
+            <h1>Bubbles: </h1>
+            {bubbleNodes}
         </div>
     );
 };
@@ -109,23 +96,25 @@ const CurrentStatus = (props) => {
     )
 };
 
-
-
+// all react components that need to be updated with info
+// from the server are filled here
 const reloadPage = () => {
     loadBubblesFromServer();
     loadUserStatus();
 };
 
-
+// fill bubble list component
 const loadBubblesFromServer = async () => {
-    //const response = await fetch('/get-bubbles');
-    //const data = await response.json();
-    // ReactDOM.render(
-    //     <BubbleList bubbles={data.bubbles} />,
-    //     document.getElementById('bubbles')
-    // );
+    const response = await fetch('/get-bubbles');
+    const data = await response.json();
+    //console.log(data);
+    ReactDOM.render(
+        <BubbleList bubbles={data.bubbles} />,
+        document.getElementById('bubbles')
+    );
 };
 
+// fill user status component
 const loadUserStatus = async () => {
     const response = await fetch('/get-current-status');
     const data = await response.json();
@@ -136,19 +125,17 @@ const loadUserStatus = async () => {
 }
 
 const init = () => {
-    // ReactDOM.render(
-    //     <StatusForm />,
-    //     document.getElementById('makeStatus')
-    // );
+    ReactDOM.render(
+        <StatusForm />,
+        document.getElementById('makeStatus')
+    );
 
-    // ReactDOM.render(
-    //     <BubbleList bubbles={[]} />,
-    //     document.getElementById('bubbles')
-    // );
+    ReactDOM.render(
+        <BubbleList bubbles={[]} />,
+        document.getElementById('bubbles')
+    );
 
-    //loadBubblesFromServer();
-    fetch('/get-bubbles');
-    //loadUserStatus();
+    reloadPage();
 };
 
 window.onload = init;

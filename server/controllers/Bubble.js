@@ -67,13 +67,34 @@ const createBubble = async (req, res) => {
 
 const getBubbles = async (req, res) => {
     try {
-        const bubbles = await Bubble.find({ users:  { $in: [ req.session.account._id ]}});
-        console.log(bubbles);
-        if (!bubbles) {
-            return res.json({ bubbles: [] });
+        // get all of the bubbles this user is a member of
+        const doc = await Bubble.find({ users:  { $in: [ req.session.account._id ]}});
+        
+        if (!doc) {
+            return res.status(404).json({ error: 'No bubbles found!' });
         }
 
-        return res.json({ bubbles: bubbles });
+        let bubbles = [];   // all of user's bubbles
+
+        for (let i = 0; i < doc.length; i++) {
+            let bubble = {};    // bubble we are creating
+            let users = [];     // list of usernames to put in bubble
+
+            // get each user's username
+            for (let userid of doc[i].users) {
+                let user = await models.Account.findById(userid).exec();
+                users.push(user.username);
+            };
+
+            // construct the bubble with only the data the user needs
+            bubble = {
+                name: doc[i].name,
+                users: users,
+            };
+
+            bubbles.push(bubble);
+        }
+        return res.json({ bubbles });
     } catch (err) {
         console.log(err);
         return res.status(500).json({ error: 'An error occured!' });
@@ -82,7 +103,7 @@ const getBubbles = async (req, res) => {
 
 const getUsernamesInBubble = async (req, res) => {
     try {
-        const bubble = await Bubble.find({ name: req.body.bubble }).populate('users').exec();
+        const bubble = await Bubble.find({ name: req.body.bubble }).exec();
         // bubble.users.forEach((userid) => {
             
         //     //usernames.push( await userid.find({ _id: userid}).populate('account').exec()));
