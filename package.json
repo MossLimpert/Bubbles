@@ -1,7 +1,7 @@
 {
   "name": "bubbles",
   "version": "1.0.0",
-  "description": "A Simple Login Example using Node.js, Mongo and Redis",
+  "description": "A simple status based social media app",
   "main": "./server/app.js",
   "scripts": {
     "webpack": "webpack",
@@ -10,6 +10,8 @@
     "start": "node ./server/app.js",
     "pretest": "eslint ./server --fix",
     "test": "echo \"Tests complete\"",
+    "build": "gulp build",
+    "watch": "gulp watch",
     "heroku-postbuild": "webpack"
   },
   "keywords": [
@@ -27,9 +29,15 @@
     "eslint": "^8.36.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.27.5",
+    "gulp": "^4.0.2",
+    "gulp-eslint-new": "^1.7.2",
+    "gulp-nodemon": "^2.5.0",
+    "gulp-sass": "^5.1.0",
     "nodemon": "^2.0.21",
+    "sass": "^1.62.0",
     "webpack": "^5.76.2",
-    "webpack-cli": "^5.0.1"
+    "webpack-cli": "^5.0.2",
+    "webpack-stream": "^7.0.0"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",

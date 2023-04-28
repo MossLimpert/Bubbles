@@ -1,7 +1,7 @@
 const models = require('../models');
 const mongoose = require('mongoose');
 
-const { Bubble } = models;
+const { Bubble, Account, Status } = models;
 
 // directs user to join / create bubble page
 const joinPage = (req, res) => res.render('join-bubble');
@@ -15,7 +15,7 @@ const joinBubble = async (req, res) => {
         return res.status(400).json({ error: 'All fields are required!' });
     }
 
-    return await Bubble.authenticate(bubblename, pass, (err, bubble) => {
+    return Bubble.authenticate(bubblename, pass, (err, bubble) => {
         if (err || !bubble) {
             return res.status(401).json({ error: 'Wrong bubble name or password!' });
         }
@@ -48,7 +48,11 @@ const createBubble = async (req, res) => {
     try {
         const hash = await Bubble.generateHash(pass);
         // CHECK TO MAKE SURE THIS WORKS
-        const newBubble = new Bubble({ name: bubblename, password: hash, users: [new mongoose.Types.ObjectId(req.session.account._id)] });
+        const newBubble = new Bubble({ 
+            name: bubblename, 
+            password: hash, 
+            users: [new mongoose.Types.ObjectId(req.session.account._id)] 
+        });
         await newBubble.save();
 
         // session variables
@@ -66,54 +70,77 @@ const createBubble = async (req, res) => {
 }
 
 const getBubbles = async (req, res) => {
-    try {
-        // get all of the bubbles this user is a member of
-        const doc = await Bubble.find({ users:  { $in: [ req.session.account._id ]}});
-        
-        if (!doc) {
-            return res.status(404).json({ error: 'No bubbles found!' });
-        }
+    // get all of the bubbles this user is a member of
+    const doc = await Bubble.find({ users:  { $in: [ req.session.account._id ]}});
+    
+    //https://stackoverflow.com/questions/48957022/unexpected-await-inside-a-loop-no-await-in-loop#48957222
 
-        let bubbles = [];   // all of user's bubbles
+    if (!doc) {
+        return res.status(404).json({ error: 'No bubbles found!' });
+    }
 
+    const userids = [];
+
+    for (let i = 0; i < doc.length; i++) {
+        userids.push(doc[i].users);
+    }
+
+    const promises = [];
+    const usernames = [];
+    const statuses = [];
+
+    userids.forEach(bubbleUsers => {
+        const promise = Account.find({'_id': {$in: bubbleUsers}}).select('username currentStatus').exec();
+
+        promise.then(names => {
+            usernames.push(names);
+        });
+
+        promise.catch(err => {
+            console.log(err);
+            return res.status(500).json({ error: 'An error occured!' });
+        });
+
+        promises.push(promise);
+    });
+
+    userids.forEach(bubbleUsers => {
+        const promise = Status.find({ 'userid': {$in: bubbleUsers}}).select('text').exec();
+
+        promise.then(s => {
+            statuses.push(s);
+        });
+
+        promise.catch(err => {
+            console.log(err);
+            return res.status(500).json({ error: 'Error retrieving status of user in bubble'});
+        })
+
+        promises.push(promise);
+    });
+
+    return Promise.all(promises).then(() => {
+        const bubbles = [];   // all of user's bubbles
         for (let i = 0; i < doc.length; i++) {
-            let bubble = {};    // bubble we are creating
-            let users = [];     // list of usernames to put in bubble
-
-            // get each user's username
-            for (let userid of doc[i].users) {
-                let user = await models.Account.findById(userid).exec();
-                users.push(user.username);
-            };
-
-            // construct the bubble with only the data the user needs
-            bubble = {
-                name: doc[i].name,
-                users: users,
-            };
-
-            bubbles.push(bubble);
-        }
-        return res.json({ bubbles });
-    } catch (err) {
-        console.log(err);
-        return res.status(500).json({ error: 'An error occured!' });
-    }
-};
-
-const getUsernamesInBubble = async (req, res) => {
-    try {
-        const bubble = await Bubble.find({ name: req.body.bubble }).exec();
-        // bubble.users.forEach((userid) => {
+            let newBubble = {};    // bubble we are creating
             
-        //     //usernames.push( await userid.find({ _id: userid}).populate('account').exec()));
-        // });
+            // construct the bubble with only the data the user needs
+            newBubble = {
+                name: doc[i].name,
+                users: usernames[i],
+                statuses: statuses[i],
+            };
 
-        return res.json({ usernames: usernames });
-    } catch (err) {
+            bubbles.push(newBubble);
+        }
+
+        //console.log(bubbles);
+
+        return res.json({ bubbles: bubbles });
+    }).catch(err => {
         console.log(err);
         return res.status(500).json({ error: 'An error occured!' });
-    }
+    });
 };
 
 module.exports = {
