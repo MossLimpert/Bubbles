@@ -8,7 +8,7 @@ const joinPage = (req, res) => res.render('join-bubble');
 
 // allows a user to join an already existing bubble
 const joinBubble = async (req, res) => {
-    const bubblename = `${req.body.name}`;
+    const bubblename = `${req.body.bubbleName}`;
     const pass = `${req.body.pass}`;
 
     if (!bubblename || !pass) {
@@ -17,6 +17,7 @@ const joinBubble = async (req, res) => {
 
     return Bubble.authenticate(bubblename, pass, (err, bubble) => {
         if (err || !bubble) {
+            console.log(bubble);
             return res.status(401).json({ error: 'Wrong bubble name or password!' });
         }
 
@@ -82,6 +83,12 @@ const getBubbles = async (req, res) => {
     const userids = [];
 
     for (let i = 0; i < doc.length; i++) {
+        // remove our name
+        let index = doc[i].users.indexOf(req.session.account._id);
+        if (index !== -1) {
+            doc[i].users.splice(index, 1);
+        }
+        
         userids.push(doc[i].users);
     }
 

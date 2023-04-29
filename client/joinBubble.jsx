@@ -14,10 +14,7 @@ const handleJoinBubble = (e) => {
         return false;
     }
 
-    helper.sendPost(e.target.action, { 
-        name: bubbleName, 
-        pass: pass,
-    });
+    helper.sendPost(e.target.action, {bubbleName, pass});
 
     return false;
 };
@@ -59,10 +56,12 @@ const JoinBubbleWindow = (props) => {
             className="mainForm"
         >
             <h3>Join Bubble</h3>
-            <label htmlFor="bubbleName">Bubble Name: </label>
-            <input id="bubbleName" type="text" name="bubbleName" placeholder="bubble name" />
-            <label htmlFor="bubblePassword">Bubble Password: </label>
-            <input id="bubblePassword" type="password" name="bubblePassword" placeholder="password" />
+            <span><label htmlFor="bubbleName">Bubble Name: </label>
+            <input id="bubbleName" type="text" name="bubbleName" placeholder="bubble name" /></span>
+            <br />
+            <span><label htmlFor="bubblePassword">Bubble Password: </label>
+            <input id="bubblePassword" type="password" name="bubblePassword" placeholder="password" /></span>
+            <br />
             <input className="formSubmit" type="submit" value="Join Bubble" />
         </form>
     )
@@ -78,12 +77,12 @@ const CreateBubbleWindow = (props) => {
             className="mainForm"
         >
             <h3>Create Bubble</h3>
-            <label htmlFor="bubbleName">Bubble Name: </label>
-            <input id="bubbleName" name="bubbleName" type="text" placeholder="bubble name" />
-            <label htmlFor="bubblePassword">Bubble Password: </label>
-            <input id="bubblePassword" name="bubblePassword" type="password" placeholder="password" />
-            <label htmlFor="retypePassword">Retype Password: </label>
-            <input id="retypePassword" name="retypePassword" type="password" placeholder="retype password" />
+            <span><label htmlFor="bubbleName">Bubble Name: </label>
+            <input id="bubbleName" name="bubbleName" type="text" placeholder="bubble name" /></span>
+            <span><label htmlFor="bubblePassword">Bubble Password: </label>
+            <input id="bubblePassword" name="bubblePassword" type="password" placeholder="password" /></span>
+            <span><label htmlFor="retypePassword">Retype Password: </label>
+            <input id="retypePassword" name="retypePassword" type="password" placeholder="retype password" /></span>
             <input className="formSubmit" type="submit" value="Create Bubble" />
         </form>
     )

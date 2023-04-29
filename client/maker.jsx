@@ -44,6 +44,8 @@ const StatusForm = (props) => {
     );
 };
 
+
+
 // react bubble list component
 const BubbleList = (props) => {
     // if user is in no bubbles, say so
@@ -102,7 +104,7 @@ const BubbleList = (props) => {
             let n = props.bubbles[i].users[j].username; // username
             let t = usersStatuses.get(n);               // text
             let l = t.length * 14;                      // speech bubble length
-            let w = 100 + l / 2;                        // svg width
+            let w = 100 + l / 8;                        // svg width
             
             bubblesUsers.push(
                 <CircleWithSpeechBubble 
@@ -121,8 +123,16 @@ const BubbleList = (props) => {
     // put it all together
     for (let i = 0; i < props.bubbles.length; i++) {
         bubbleNodes.push(
-            <div className="bubble">
-                <h2 className="bubbleName">Name: {props.bubbles[i].name} </h2>
+            <div className="bubble"
+                style={{
+                    backgroundColor: props.color,
+                    width: props.radius * 2,
+                    height: props.radius * 2,
+                    borderRadius: '50%',
+                    padding: '20px'
+                }}
+            >
+                <h2 className="bubbleName">{props.bubbles[i].name} </h2>
                 <ul className="bubbleUsers"> 
                     {usernameNodes[i]}
                 </ul>
@@ -131,7 +141,7 @@ const BubbleList = (props) => {
     };
     //console.log(usernameNodes);
     //console.log(bubbleNodes);
-    
+
     return (
         <div className="bubblesList">
             <h1>Bubbles: </h1>
@@ -184,7 +194,7 @@ const loadBubblesFromServer = async () => {
     const data = await response.json();
     //console.log(data);
     ReactDOM.render(
-        <BubbleList bubbles={data.bubbles} />,
+        <BubbleList bubbles={data.bubbles} color="rgb(137, 161, 239)" radius={200}/>,
         document.getElementById('bubbles')
     );
 };

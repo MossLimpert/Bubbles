@@ -36,7 +36,7 @@ BubbleSchema.statics.generateHash = (password) => bcrypt.hash(password, saltRoun
 // authenticates a password against the one in the database
 BubbleSchema.statics.authenticate = async (bubblename, password, callback) => {
     try {
-        const doc = await BubbleModel.findOne({ bubblename }).exec();
+        const doc = await BubbleModel.findOne({ name: bubblename }).exec();
         if (!doc) {
             return callback();
         }
