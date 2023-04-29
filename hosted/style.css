@@ -65,6 +65,10 @@ nav:nth-child(1) {
     font-size: 1.2em;
 }
 
+#signupForm {
+    width: 450px;
+}
+
 .mainForm h3 {
     text-align: center;
 }
@@ -79,6 +83,9 @@ nav:nth-child(1) {
 }
 #joinBubbleForm label {
     width: 210px;
+}
+#signupForm label {
+    width: 220px;
 }
 
 .mainForm label {
@@ -161,7 +168,7 @@ nav:nth-child(1) {
 }
 .bubble {
     margin: 10px;
-    
+    overflow: scroll;
 }
 .bubble h2 {
     padding: 0 150px;

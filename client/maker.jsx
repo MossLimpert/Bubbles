@@ -103,8 +103,11 @@ const BubbleList = (props) => {
             let c = randomPaletteColor();               // color
             let n = props.bubbles[i].users[j].username; // username
             let t = usersStatuses.get(n);               // text
-            let l = t.length * 14;                      // speech bubble length
-            let w = 100 + l / 8;                        // svg width
+            let l;                                      // speech bubble length
+            if (!t) {
+                l = 1;               
+            } else l = t.length * 10;       
+            let w = 100 + l / 2;                        // svg width
             
             bubblesUsers.push(
                 <CircleWithSpeechBubble 
@@ -169,16 +172,36 @@ const CircleWithSpeechBubble = (props) => {
 
     // speech bubble offset
     // rework this l8r
-    let offset = `translate(-${props.length/16},0)`
+    let offset = `translate(-${props.length/8},0)`;
+
+    // const speechBubble = (props) => {
+    //     return (
+    //         <div>
+    //             <rect x="10" y="20" width={props.length} transform={offset} height="30" rx="10" fill={props.color} />
+    //             <text x="50" y="40" textAnchor="middle" fill="white" fontSize="16">{props.text}</text>
+    //         </div>
+    //     );
+    // }
+
+
+    if (props.length < 10) {
+        return (
+            <svg width={props.width} height="150">
+              <circle cx="50" cy="100" r="40" fill={props.color} />
+      
+              <text x="50" y="100" textAnchor="middle" fill="white" fontSize="16">{props.username}</text>
+            </svg>
+          );
+    }
     return (
-      <svg width={props.width} height="300">
-        <circle cx="50" cy="100" r="40" fill={props.color} />
-        <path d="M50 20 l20 -20 h-40 l20 20 z" fill={props.color} transform="translate(0,40)" />
-        <rect x="10" y="20" width={props.length} transform={offset} height="30" rx="10" fill={props.color} />
-        <text x="50" y="40" textAnchor="middle" fill="white" fontSize="16">{props.text}</text>
-        <text x="50" y="100" textAnchor="middle" fill="white" fontSize="16">{props.username}</text>
-      </svg>
-    );
+        <svg width={props.width} height="150">
+          <circle cx="50" cy="100" r="40" fill={props.color} />
+          <path d="M50 20 l20 -20 h-40 l20 20 z" fill={props.color} transform="translate(0,40)" />
+          <rect x="10" y="20" width={props.length} transform={offset} height="30" rx="10" fill={props.color} />
+          <text x="50" y="40" textAnchor="middle" fill="white" fontSize="16">{props.text}</text>
+          <text x="50" y="100" textAnchor="middle" fill="white" fontSize="16">{props.username}</text>
+        </svg>
+      );
 };
 
 // all react components that need to be updated with info
