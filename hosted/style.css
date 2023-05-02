@@ -139,12 +139,8 @@ nav:nth-child(1) {
 
 #message {
     top: 250px;
-    width: 250px;
 }
 
-#message h3 {
-    width: 200px;
-}
 
 #speech {
     height: 120px;
@@ -163,7 +159,7 @@ nav:nth-child(1) {
 
 .bubblesList {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     padding: 20px 0 0 0;
 }
 .bubble {

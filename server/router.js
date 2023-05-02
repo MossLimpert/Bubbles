@@ -41,6 +41,10 @@ const router = (app) => {
   app.post('/join-bubble', mid.requiresSecure, mid.requiresLogin, controllers.Bubble.joinBubble);
   app.post('/create-bubble', mid.requiresSecure, mid.requiresLogin, controllers.Bubble.createBubble);
   
+
+  // monetization
+  app.get('/buy-premium', mid.requiresSecure, mid.requiresLogin, controllers.Account.buyPremiumPage);
+  app.post('/buy-premium', mid.requiresSecure, mid.requiresLogin, controllers.Account.buyPremium);
 };
 
 module.exports = router;

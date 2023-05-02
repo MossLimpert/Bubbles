@@ -106,7 +106,7 @@ const BubbleList = (props) => {
             let l;                                      // speech bubble length
             if (!t) {
                 l = 1;               
-            } else l = t.length * 10;       
+            } else l = t.length * 11;       
             let w = 100 + l / 2;                        // svg width
             
             bubblesUsers.push(
@@ -172,17 +172,12 @@ const CircleWithSpeechBubble = (props) => {
 
     // speech bubble offset
     // rework this l8r
-    let offset = `translate(-${props.length/8},0)`;
+    //let offset = `translate(-${props.length/16},0)`;
+    
+    // bubble arrow offset
+    let offset = `translate(${props.length / 4}, 40)`;
 
-    // const speechBubble = (props) => {
-    //     return (
-    //         <div>
-    //             <rect x="10" y="20" width={props.length} transform={offset} height="30" rx="10" fill={props.color} />
-    //             <text x="50" y="40" textAnchor="middle" fill="white" fontSize="16">{props.text}</text>
-    //         </div>
-    //     );
-    // }
-
+    let speechBubbleOffset = `${(props.width - props.length) / 2}`;
 
     if (props.length < 10) {
         return (
@@ -195,14 +190,19 @@ const CircleWithSpeechBubble = (props) => {
     }
     return (
         <svg width={props.width} height="150">
-          <circle cx="50" cy="100" r="40" fill={props.color} />
-          <path d="M50 20 l20 -20 h-40 l20 20 z" fill={props.color} transform="translate(0,40)" />
-          <rect x="10" y="20" width={props.length} transform={offset} height="30" rx="10" fill={props.color} />
-          <text x="50" y="40" textAnchor="middle" fill="white" fontSize="16">{props.text}</text>
-          <text x="50" y="100" textAnchor="middle" fill="white" fontSize="16">{props.username}</text>
+          <circle cx={props.width / 2} cy="100" r="40" fill={props.color} />
+          <path d="M50 20 l20 -20 h-40 l20 20 z" fill={props.color} transform={offset} />
+          <rect x={speechBubbleOffset} y="20" width={props.length} height="30" rx="10" fill={props.color} />
+          <text x={props.width / 2} y="40" textAnchor="middle" fill="white" fontSize="16">{props.text}</text>
+          <text x={props.width / 2} y="100" textAnchor="middle" fill="white" fontSize="16">{props.username}</text>
         </svg>
       );
 };
+
+// react past status component
+// const Status = (props) => {
+
+// }
 
 // all react components that need to be updated with info
 // from the server are filled here

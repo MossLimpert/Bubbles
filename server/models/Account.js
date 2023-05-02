@@ -28,6 +28,10 @@ const AccountSchema = new mongoose.Schema({
   currentStatus: {
     type: mongoose.Schema.Types.ObjectId,
   },
+  premiumMembership: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 // Converts a doc to something we can store in redis later on.
@@ -58,6 +62,15 @@ AccountSchema.statics.authenticate = async (username, password, callback) => {
       return callback(null, doc);
     }
     return callback();
+  } catch (err) {
+    return callback(err);
+  }
+};
+
+AccountSchema.statics.buyPremium = async (userid, callback) => {
+  try {
+    const res = await AccountModel.updateOne({_id: userid}, {premiumMembership: true}).exec();
+    return callback(res.acknowledged);
   } catch (err) {
     return callback(err);
   }

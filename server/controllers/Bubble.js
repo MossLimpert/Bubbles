@@ -15,6 +15,17 @@ const joinBubble = async (req, res) => {
         return res.status(400).json({ error: 'All fields are required!' });
     }
 
+    const user = await Account.findById(req.session.account._id);
+    if (!user.premiumMembership) {
+        // check if user is already in 5 bubbles
+        const userBubbles = await Bubble.find({ users: req.session.account._id }).exec();
+        console.log(userBubbles);
+        if (userBubbles.length >= 5) {
+            return res.status(402).json({error: 'You have already joined/created 5 bubbles. Please purchase premium membership to join more.'});
+        }
+    }
+
+
     return Bubble.authenticate(bubblename, pass, (err, bubble) => {
         if (err || !bubble) {
             console.log(bubble);
@@ -45,6 +56,18 @@ const createBubble = async (req, res) => {
     if (pass !== pass2) {
         return res.status(400).json({ error: 'Passwords do not match!' });
     }
+
+    // check if not premium
+    const user = await Account.findById(req.session.account._id);
+    if (!user.premiumMembership) {
+        // check if user is already in 5 bubbles
+        const userBubbles = await Bubble.find({ users: req.session.account._id }).exec();
+        console.log(userBubbles);
+        if (userBubbles.length >= 5) {
+            return res.status(402).json({error: 'You have already joined/created 5 bubbles. Please purchase premium membership to join more.'});
+        }
+    }
+    
 
     try {
         const hash = await Bubble.generateHash(pass);
