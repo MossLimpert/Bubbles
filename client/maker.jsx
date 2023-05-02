@@ -26,6 +26,15 @@ const handleStatus = (e) => {
     return false;
 };
 
+const handleClickStatus = (e) => {
+    e.preventDefault();
+
+    const statusInputElem = document.querySelector('#statusText');
+    const text = e.target.innerHTML;
+    //console.log(text);
+    statusInputElem.value = text;
+};
+
 // react status form component
 const StatusForm = (props) => {
     return (
@@ -43,8 +52,6 @@ const StatusForm = (props) => {
         </form>
     );
 };
-
-
 
 // react bubble list component
 const BubbleList = (props) => {
@@ -148,7 +155,9 @@ const BubbleList = (props) => {
     return (
         <div className="bubblesList">
             <h1>Bubbles: </h1>
-            {bubbleNodes}
+            <div id='bubbles'>
+                {bubbleNodes}
+            </div>
         </div>
     );
 };
@@ -200,15 +209,71 @@ const CircleWithSpeechBubble = (props) => {
 };
 
 // react past status component
-// const Status = (props) => {
+const Status = (props) => {
+    let borderRadius = props.size / 2;
+    let fs = 16;
+    return (
+        <div 
+            id="statusNode"
+            onClick={handleClickStatus}
+            style={{ 
+                width: props.size, 
+                height: fs * 2, 
+                borderRadius, 
+                backgroundColor:randomPaletteColor(), 
+                display: 'flex', 
+                flexDirection: 'row',
+                justifyContent: 'center', 
+                alignItems: 'center',
+                margin: `0 10 0 0`, 
+            }}
+        >   
+            <span style={{ 
+                fontSize: fs, 
+                color: 'white' 
+            }}>
+                {props.text}
+            </span>
+        </div>
+    );
+};
 
-// }
+const PastStatusList = (props) => {
+    if (props.statuses.length === 0) {
+        return (
+            <div id="statusList">
+                <h3>No Past Statuses!</h3>
+            </div>
+        )
+    }
+
+    const statusNodes = [];
+
+    // make all the status nodes
+    for (let i = 0; i < props.statuses.length; i++) {
+        // text
+        let t = props.statuses[i];
+        // size
+        let s = props.statuses[i].length * 11;
+        statusNodes.push( <Status
+            text={t}
+            size={s} />
+        );
+    }
+
+    return (
+        <div id='statuses'>
+            {statusNodes}
+        </div>
+    );
+}
 
 // all react components that need to be updated with info
 // from the server are filled here
 const reloadPage = () => {
     loadBubblesFromServer();
     loadUserStatus();
+    loadPastStatuses();
 };
 
 // fill bubble list component
@@ -218,7 +283,7 @@ const loadBubblesFromServer = async () => {
     //console.log(data);
     ReactDOM.render(
         <BubbleList bubbles={data.bubbles} color="rgb(137, 161, 239)" radius={200}/>,
-        document.getElementById('bubbles')
+        document.getElementById('allBubbles')
     );
 };
 
@@ -233,15 +298,32 @@ const loadUserStatus = async () => {
     );
 }
 
+const loadPastStatuses = async () => {
+    const response = await fetch('/get-user-statuses');
+    const data = await response.json();
+    //console.log(data);
+    ReactDOM.render(
+        <PastStatusList statuses={data.statuses} />,
+        document.getElementById('pastStatus')
+    )
+}
+
+
 const init = () => {
+    // create status form
     ReactDOM.render(
         <StatusForm />,
         document.getElementById('makeStatus')
     );
-
+    // bubbles list
     ReactDOM.render(
         <BubbleList bubbles={[]} />,
-        document.getElementById('bubbles')
+        document.getElementById('allBubbles')
+    );
+    // statuses list 
+    ReactDOM.render(
+        <PastStatusList statuses={[]} />,
+        document.getElementById('pastStatus')
     );
 
     reloadPage();

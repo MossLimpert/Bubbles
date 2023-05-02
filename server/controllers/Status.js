@@ -48,7 +48,8 @@ const getUserStatuses = async (req, res) => {
             statuses.push(myStatuses[i].text);
         }
 
-        return res.json({ statuses: myStatuses });
+        //console.log(statuses);
+        return res.json({ statuses: statuses });
     } catch (err) {
         console.log(err);
         return res.status(500).json({ error: 'Error retrieving statuses!' });

@@ -108,7 +108,7 @@ nav:nth-child(1) {
     border-radius: 2px;
     border-color: rgb(137, 161, 239);
     padding: 3px 0px;
-    color: white
+    color: white;
     text-decoration: none;
 }
 
@@ -158,9 +158,13 @@ nav:nth-child(1) {
 /* MOSS ADDITIONS STARTING HERE */
 
 .bubblesList {
+    
+}
+#bubbles {
     display: flex;
-    flex-direction: column;
-    padding: 20px 0 0 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 10px;
 }
 .bubble {
     margin: 10px;
@@ -168,4 +172,12 @@ nav:nth-child(1) {
 }
 .bubble h2 {
     padding: 0 150px;
+}
+
+#statusList {
+    width: auto;
+}
+#statuses {
+    display: inline-flex;
+    flex-wrap: wrap;
 }
