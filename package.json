@@ -20,7 +20,7 @@
     "Redis",
     "Login"
   ],
-  "author": "Cody Van De Mark / Austin Willoughby",
+  "author": "Moss Limpert",
   "license": "Apache 2.0",
   "devDependencies": {
     "@babel/core": "^7.21.4",

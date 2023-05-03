@@ -56,7 +56,7 @@ const StatusForm = (props) => {
 // react bubble list component
 const BubbleList = (props) => {
     // if user is in no bubbles, say so
-    if (props.bubbles.length === 0) {
+    if (props.bubbles.length === 0 || !props.bubbles) {
         return (
             <div className="bubblesList">
                 <h3 className="emptyBubbles">No Bubbles Yet!</h3>
@@ -68,50 +68,18 @@ const BubbleList = (props) => {
     // give it a bubble
     const bubbleNodes = [];
 
-    // go through statuses, make a map with 0 redundancies
-    const allBubbleStatuses = new Map();
-    for (let i = 0; i < props.bubbles.length; i++) {
-        for (let j = 0; j < props.bubbles[i].statuses.length; j++) {
-            let keyValues = Object.entries(props.bubbles[i].statuses[j]);
-            allBubbleStatuses.set(
-                keyValues[0][1],
-                keyValues[1][1]
-            );
-        }
-    }
-    //console.log(allBubbleStatuses);
-
     // for each bubble, make user circles w statuses
     const usernameNodes = [];
     for (let i = 0; i < props.bubbles.length; i++) {
         const bubblesUsers = [];
-        // match users to their current statuses by going through data
-        const usersStatuses = new Map();
-
-        // go thru users, get their current status id
-        for (let k = 0; k < props.bubbles[i].users.length; k++) {
-            // user we are currently on , their current status
-            let statusID = props.bubbles[i].users[k].currentStatus;
-
-            // find this user's current status by its id
-            //console.log(allBubbleStatuses.get(statusID));
-            if (allBubbleStatuses.get(statusID)) {
-                usersStatuses.set(
-                    props.bubbles[i].users[k].username,
-                    allBubbleStatuses.get(statusID)
-                );
-            }
-        }
-
-        //console.log(usersStatuses);
 
         // for each user, make the circles
         for (let j = 0; j < props.bubbles[i].users.length; j++) {
             let c = randomPaletteColor();               // color
             let n = props.bubbles[i].users[j].username; // username
-            let t = usersStatuses.get(n);               // text
+            let t = props.bubbles[i].users[j].status;   // text
             let l;                                      // speech bubble length
-            if (!t) {
+            if (!t || t === "") {
                 l = 1;               
             } else l = t.length * 11;       
             let w = 100 + l / 2;                        // svg width
@@ -282,7 +250,7 @@ const loadBubblesFromServer = async () => {
     const data = await response.json();
     //console.log(data);
     ReactDOM.render(
-        <BubbleList bubbles={data.bubbles} color="rgb(137, 161, 239)" radius={200}/>,
+        <BubbleList bubbles={data} color="rgb(137, 161, 239)" radius={200}/>,
         document.getElementById('allBubbles')
     );
 };
@@ -326,6 +294,7 @@ const init = () => {
         document.getElementById('pastStatus')
     );
 
+    //fetch('/get-bubbles');
     reloadPage();
 };
 

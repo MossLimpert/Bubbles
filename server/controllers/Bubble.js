@@ -93,6 +93,7 @@ const createBubble = async (req, res) => {
     }
 }
 
+// app page requests all the bubbles the user is in
 const getBubbles = async (req, res) => {
     // get all of the bubbles this user is a member of
     const doc = await Bubble.find({ users:  { $in: [ req.session.account._id ]}});
@@ -107,70 +108,51 @@ const getBubbles = async (req, res) => {
 
     for (let i = 0; i < doc.length; i++) {
         // remove our name
-        let index = doc[i].users.indexOf(req.session.account._id);
-        if (index !== -1) {
-            doc[i].users.splice(index, 1);
-        }
+        // let index = doc[i].users.indexOf(req.session.account._id);
+        // if (index !== -1) {
+        //     doc[i].users.splice(index, 1);
+        // }
         
         userids.push(doc[i].users);
     }
 
-    const promises = [];
-    const usernames = [];
-    const statuses = [];
+    const promises = doc.map(async bubble => {
+        const usersAndStatusIds = await Account.find({'_id': {$in: bubble.users}}).select('username currentStatus').exec();
 
-    userids.forEach(bubbleUsers => {
-        const promise = Account.find({'_id': {$in: bubbleUsers}}).select('username currentStatus').exec();
+        //console.log(users_and_status_ids);
 
-        promise.then(names => {
-            usernames.push(names);
-        });
+        const bubbleUsersStatuses = await Promise.all(usersAndStatusIds.map( async userAndStatus => {
+            let status = await Status.findById(userAndStatus.currentStatus).select('text').exec();
 
-        promise.catch(err => {
+            //console.log(status);
+            // if the user has no status, status is null
+            let text = "";
+            if (status)
+            {
+                text = status.text
+            }
+            //console.log(text);
+            return {
+                username: userAndStatus.username,
+                status: text
+            };
+        }));
+
+        return {
+            name: bubble.name,
+            users: bubbleUsersStatuses
+        };
+    })
+
+    const result =  await Promise.all(promises)
+        .catch(err => {
             console.log(err);
             return res.status(500).json({ error: 'An error occured!' });
         });
 
-        promises.push(promise);
-    });
+    //console.log(JSON.stringify(result));
 
-    userids.forEach(bubbleUsers => {
-        const promise = Status.find({ 'userid': {$in: bubbleUsers}}).select('text').exec();
-
-        promise.then(s => {
-            statuses.push(s);
-        });
-
-        promise.catch(err => {
-            console.log(err);
-            return res.status(500).json({ error: 'Error retrieving status of user in bubble'});
-        })
-
-        promises.push(promise);
-    });
-
-    return Promise.all(promises).then(() => {
-        const bubbles = [];   // all of user's bubbles
-        for (let i = 0; i < doc.length; i++) {
-            let newBubble = {};    // bubble we are creating
-            
-            // construct the bubble with only the data the user needs
-            newBubble = {
-                name: doc[i].name,
-                users: usernames[i],
-                statuses: statuses[i],
-            };
-
-            bubbles.push(newBubble);
-        }
-
-        //console.log(bubbles);
-
-        return res.json({ bubbles: bubbles });
-    }).catch(err => {
-        console.log(err);
-        return res.status(500).json({ error: 'An error occured!' });
-    });
+    return res.json(result);
 };
 
 module.exports = {
