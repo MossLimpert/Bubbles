@@ -53,10 +53,16 @@ const signup = async (req, res) => {
 
     return res.json({ redirect: '/home' });
   } catch (err) {
-    console.log(err);
+    //console.log(err.errors);
     if (err.code === 11000) {
       return res.status(400).json({ error: 'Username already in use!' });
     }
+
+    if (err.errors.username) {
+      //console.log(err.errors.username);
+      return res.status(500).json({ error: err.errors.username.properties.message });
+    }
+
     return res.status(500).json({ error: 'An error occured!' });
   }
 };

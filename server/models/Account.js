@@ -15,7 +15,7 @@ const AccountSchema = new mongoose.Schema({
     required: true,
     trim: true,
     unique: true,
-    match: /^[A-Za-z0-9_\-.]{1,16}$/,
+    match: [/^[A-Za-z0-9_\-.]{1,16}$/, 'Usernames can be between 1 and 16 characters long, and contain numbers, underscores, and hyphens. You submitted {VALUE}'],
   },
   password: {
     type: String,
