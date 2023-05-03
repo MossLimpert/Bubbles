@@ -1,3 +1,5 @@
+// Author: Moss Limpert
+
 const helper = require('./helper.js');
 const React = require('react');
 const ReactDOM = require('react-dom');
@@ -9,7 +11,11 @@ const randomPaletteColor = () => {
     return colors[index];
 }
 
-// status form
+//
+// event handlers
+//
+
+// manage status form input + send post
 const handleStatus = (e) => {
     e.preventDefault();
     helper.hideError();
@@ -26,6 +32,7 @@ const handleStatus = (e) => {
     return false;
 };
 
+// onclick function for statuses to fill create status form
 const handleClickStatus = (e) => {
     e.preventDefault();
 
@@ -34,6 +41,10 @@ const handleClickStatus = (e) => {
     //console.log(text);
     statusInputElem.value = text;
 };
+
+//
+// react components
+//
 
 // react status form component
 const StatusForm = (props) => {
@@ -140,7 +151,6 @@ const CurrentStatus = (props) => {
 };
 
 // react svg circle bubble component
-
 const CircleWithSpeechBubble = (props) => {
     // color
     // speech bubble length
@@ -206,6 +216,7 @@ const Status = (props) => {
     );
 };
 
+// react list of statuses component
 const PastStatusList = (props) => {
     if (props.statuses.length === 0) {
         return (
@@ -234,7 +245,11 @@ const PastStatusList = (props) => {
             {statusNodes}
         </div>
     );
-}
+};
+
+//
+// loading / page functionality
+//
 
 // all react components that need to be updated with info
 // from the server are filled here
@@ -264,8 +279,9 @@ const loadUserStatus = async () => {
         <CurrentStatus status={data.status} />,
         document.getElementById('currentStatus')
     );
-}
+};
 
+// fill list of user statuses
 const loadPastStatuses = async () => {
     const response = await fetch('/get-user-statuses');
     const data = await response.json();
@@ -274,7 +290,7 @@ const loadPastStatuses = async () => {
         <PastStatusList statuses={data.statuses} />,
         document.getElementById('pastStatus')
     )
-}
+};
 
 
 const init = () => {

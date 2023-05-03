@@ -1,15 +1,21 @@
+// Author: Moss Limpert
+
 const models = require('../models');
 
 const { Account } = models;
 
-const loginPage = (req, res) => res.render('login');
-const buyPremiumPage = (req, res) => res.render('buy-premium');
+const loginPage = (req, res) => res.render('login');            // login 
+const buyPremiumPage = (req, res) => res.render('buy-premium'); // buy premium page
+const docPage = (req, res) => res.render('docs');               // documentation page
+const changePassPage = (req, res) => res.render('reset');       // change password page
 
+// logs a user out of their account.
 const logout = (req, res) => {
   req.session.destroy();
   return res.redirect('/');
 };
 
+// logs a user in to their account
 const login = (req, res) => {
   const username = `${req.body.username}`;
   const pass = `${req.body.pass}`;
@@ -30,6 +36,7 @@ const login = (req, res) => {
   });
 };
 
+// allows a user to sign up for Bubbles
 const signup = async (req, res) => {
   const username = `${req.body.username}`;
   const pass = `${req.body.pass}`;
@@ -67,9 +74,6 @@ const signup = async (req, res) => {
   }
 };
 
-// change password page
-const changePassPage = (req, res) => res.render('reset');
-
 // allows a current user to change their password
 const changePassword = async (req, res) => {
   // req.session.account.username
@@ -104,6 +108,7 @@ const changePassword = async (req, res) => {
   }
 };
 
+// allows the user unlimited access to the app
 const buyPremium = async (req, res) => {
   try {
 
@@ -119,7 +124,7 @@ const buyPremium = async (req, res) => {
     console.log(err);
     return res.status(500).json({ error: 'Error retrieving user!' });
   }
-}
+};
 
 module.exports = {
   loginPage,
@@ -130,4 +135,5 @@ module.exports = {
   changePassword,
   buyPremiumPage,
   buyPremium,
+  docPage
 };

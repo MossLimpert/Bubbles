@@ -1,3 +1,5 @@
+// Author: Moss Limpert
+
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 

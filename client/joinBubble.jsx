@@ -1,7 +1,14 @@
+// Author: Moss Limpert
+
 const helper = require('./helper.js');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
+//
+// event handlers
+//
+
+// sends a join bubble request from a user
 const handleJoinBubble = (e) => {
     e.preventDefault();
     helper.hideError();
@@ -19,6 +26,7 @@ const handleJoinBubble = (e) => {
     return false;
 };
 
+// sends a create bubble request from user
 const handleCreateBubble = (e) => {
     e.preventDefault();
     helper.hideError();
@@ -46,6 +54,11 @@ const handleCreateBubble = (e) => {
     return false;
 };
 
+//
+// react components
+//
+
+// join bubble form
 const JoinBubbleWindow = (props) => {
     return (
         <form id="joinBubbleForm"
@@ -67,6 +80,7 @@ const JoinBubbleWindow = (props) => {
     )
 };
 
+// create bubble form
 const CreateBubbleWindow = (props) => {
     return (
         <form id="createBubbleForm"

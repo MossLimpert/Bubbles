@@ -1,41 +1,11 @@
+// Author: Moss Limpert
+
 const models = require('../models');
-//const mongoose = require('mongoose');
 
 const { Status, Bubble, Account } = models;
 
+// render homepage
 const home = async (req, res) => res.render('app');
-
-const getBubbleStatuses = async (req, res) => {
-
-    // array to store user ids in
-    const userIds = [];
-    const statuses = Map();
-
-    try {
-        // get all bubbles with user in them
-        const bubbles = await Bubble.find({ users: req.session.account._id }).exec();
-        console.log(bubbles);
-
-        // populate userIds array with user ids
-        bubbles.forEach((bubble) => {
-            bubble.users.forEach((user) => {
-                userIds.push(user._id);
-            });
-        });
-
-        // get users' current statuses 
-        const userStatuses = await Status.find({ user: { $in: userIds } }).exec();
-        userStatuses.forEach((status) => {
-            statuses.set(status.user, status);
-        });
-
-        return res.json({ statuses: statuses });
-
-    } catch (err) {
-        console.log(err);
-        return res.status(500).json({ error: 'Error retrieving statuses!' });
-    }
-};
 
 // get all statuses that belong to the user
 const getUserStatuses = async (req, res) => {
@@ -55,6 +25,7 @@ const getUserStatuses = async (req, res) => {
         return res.status(500).json({ error: 'Error retrieving statuses!' });
     }
 };
+
 // get user's current status
 const getCurrentUserStatus = async (req, res) => {
     try {
@@ -107,7 +78,6 @@ const makeStatus = async (req, res) => {
 module.exports = {
     home,
     getUserStatuses,
-    getBubbleStatuses,
     makeStatus,
     getCurrentUserStatus,
 };

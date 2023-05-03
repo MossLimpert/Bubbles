@@ -1,3 +1,5 @@
+// Author: Moss Limpert
+
 const mongoose = require('mongoose');
 
 let StatusModel = {};

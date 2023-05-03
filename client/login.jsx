@@ -1,7 +1,14 @@
+// Author: Moss Limpert
+
 const helper = require('./helper.js');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
+//
+// event handlers
+//
+
+// sends login request from login form
 const handleLogin = (e) => {
     e.preventDefault();
     helper.hideError();
@@ -19,6 +26,7 @@ const handleLogin = (e) => {
     return false;
 };
 
+// sends signup request from signup form
 const handleSignup = (e) => {
     e.preventDefault();
     helper.hideError();
@@ -42,6 +50,11 @@ const handleSignup = (e) => {
     return false;
 };
 
+//
+// react components
+//
+
+// login form
 const LoginWindow = (props) => {
     return (
         <form id="loginForm"
@@ -62,6 +75,7 @@ const LoginWindow = (props) => {
     )
 };
 
+// signup form
 const SignupWindow = (props) => {
     return (
         <form id="signupForm"
@@ -81,7 +95,6 @@ const SignupWindow = (props) => {
         </form>
     )
 };
-
 
 
 const init = () => {

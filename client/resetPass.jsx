@@ -1,7 +1,10 @@
+// Author: Moss Limpert
+
 const helper = require('./helper.js');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
+// manages form input validation for changing a user's password
 const handleChangePass = (e) => {
     e.preventDefault();
     helper.hideError();
@@ -29,7 +32,7 @@ const handleChangePass = (e) => {
 
     return false;
 };
-
+// react component for change password form
 const ChangePassWindow = (props) => {
     return (
         <form id="changePassForm"

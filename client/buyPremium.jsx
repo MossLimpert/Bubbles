@@ -1,6 +1,12 @@
+// Author: Moss Limpert
+
 const helper = require('./helper.js');
 const React = require('react');
 const ReactDOM = require('react-dom');
+
+//
+// react components
+//
 
 // react form for users to buy premium version of app
 const BuyForm = (props) => {
